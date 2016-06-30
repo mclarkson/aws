@@ -16,8 +16,10 @@ import (
 )
 
 import (
-	"launchpad.net/goamz/aws"
-	"launchpad.net/~mirtchovski/goamz/ec2/ec2"
+	//"launchpad.net/goamz/aws"
+	//"launchpad.net/~mirtchovski/goamz/ec2/ec2"
+	"github.com/goamz/goamz/aws"
+	"github.com/goamz/goamz/ec2"
 )
 
 type cmd struct {

@@ -12,7 +12,8 @@ import (
 
 import (
 	//	"launchpad.net/goamz/aws"
-	"launchpad.net/~mirtchovski/goamz/ec2/ec2"
+	//"launchpad.net/~mirtchovski/goamz/ec2/ec2"
+	"github.com/goamz/goamz/ec2"
 )
 
 func create(e *ec2.EC2, args ...string) {
@@ -21,7 +22,7 @@ func create(e *ec2.EC2, args ...string) {
 		os.Exit(1)
 	}
 
-	options := ec2.RunInstances{
+	options := ec2.RunInstancesOptions{
 		ImageId:      args[0],
 		InstanceType: "t1.micro",
 	}
@@ -137,7 +138,7 @@ func cloneImage(e *ec2.EC2, args ...string) {
 		os.Exit(1)
 	}
 
-	fmt.Printf("%s\n", resp.Id)
+	fmt.Printf("%s\n", resp.RequestId)
 }
 func instances(e *ec2.EC2, args ...string) {
 	filter := ec2.NewFilter()
@@ -150,7 +151,7 @@ func instances(e *ec2.EC2, args ...string) {
 		filter.Add(sl[0], sl[1])
 	}
 
-	resp, err := e.Instances(nil, filter)
+	resp, err := e.DescribeInstances(nil, filter)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "instances: %s\n", err)
 		os.Exit(1)
@@ -159,7 +160,7 @@ func instances(e *ec2.EC2, args ...string) {
 	for _, r := range resp.Reservations {
 		fmt.Println("reservation:", r.ReservationId)
 		for _, i := range r.Instances {
-			fmt.Printf("%s\t%s\t%s\t%s\n", i.InstanceId, i.State.Name, i.DNSName, i.ImageId)
+			fmt.Printf("%s\t%s\t%s\t%s\t%s\t%s\n", i.InstanceId, i.State.Name, i.IPAddress, i.Tags[0], i.DNSName, i.ImageId)
 		}
 	}
 }
